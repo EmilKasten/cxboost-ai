@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import openai
 import os
@@ -7,7 +7,7 @@ import os
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Set your OpenAI API key as environment variable
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -30,4 +30,4 @@ async def generate_response(request: Request, ticket: str = Form(...)):
             "response": answer
         })
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        return HTMLResponse(content=f"Fehler: {str(e)}", status_code=500)
